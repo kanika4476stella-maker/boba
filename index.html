@@ -1,0 +1,1413 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last Signal | Interactive Story</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #eaf7fb;
+            color: #173d52;
+            line-height: 1.7;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 7%;
+            background: #eaf7fb;
+            border-bottom: 1px solid #c3e0e8;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #175b79;
+        }
+
+        .logo span {
+            color: #ed8269;
+        }
+
+        nav {
+            display: flex;
+            gap: 18px;
+            font-size: 13px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #173d52;
+        }
+
+        nav a:hover {
+            color: #ed8269;
+        }
+
+        .progress-box {
+            width: 100%;
+            height: 5px;
+            background: #d0e9ef;
+            position: sticky;
+            top: 59px;
+            z-index: 9;
+        }
+
+        #progress {
+            width: 0%;
+            height: 100%;
+            background: #ed8269;
+            transition: width 0.4s;
+        }
+
+        .hero {
+            min-height: 590px;
+            padding: 75px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            background: #cceef6;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .small-title {
+            color: #347c94;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(45px, 8vw, 80px);
+            line-height: 1;
+            margin: 18px 0;
+            color: #17516d;
+        }
+
+        h1 span {
+            color: #ed8269;
+        }
+
+        .hero p {
+            max-width: 520px;
+            margin-bottom: 25px;
+        }
+
+        .button {
+            border: none;
+            display: inline-block;
+            padding: 12px 20px;
+            background: #175b79;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #ed8269;
+            transform: translateY(-2px);
+        }
+
+        .art {
+            width: 260px;
+            height: 260px;
+            min-width: 220px;
+            border-radius: 50%;
+            background: #86d2e4;
+            border: 7px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 6px 7px 0 #a4d4df;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .art::before,
+        .art::after {
+            content: "";
+            position: absolute;
+            width: 155px;
+            height: 155px;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .art::after {
+            width: 195px;
+            height: 195px;
+            opacity: 0.6;
+        }
+
+        .core {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: #f5a68b;
+            border: 4px solid #175b79;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .chapter {
+            padding: 80px 7%;
+            border-bottom: 1px solid #c9e3ea;
+            scroll-margin-top: 90px;
+        }
+
+        .chapter:nth-child(even) {
+            background: #f8fdff;
+        }
+
+        .chapter-inner {
+            max-width: 1050px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 45px;
+            align-items: center;
+        }
+
+        h2 {
+            font-size: clamp(30px, 4vw, 44px);
+            line-height: 1.2;
+            color: #175b79;
+            margin: 12px 0 18px;
+        }
+
+        .chapter p {
+            margin-bottom: 15px;
+        }
+
+        .drawing {
+            min-height: 280px;
+            border: 4px solid white;
+            outline: 1px solid #bddfe8;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #cceef6;
+        }
+
+        /* Ocean illustration */
+
+        .ocean {
+            background: linear-gradient(
+                to bottom,
+                #9ee0ee 0%,
+                #429bb9 45%,
+                #174c6b 100%
+            );
+            cursor: pointer;
+        }
+
+        .moon {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            top: 20px;
+            right: 25px;
+            background: #fff1bd;
+            border-radius: 50%;
+        }
+
+        .fish {
+            position: absolute;
+            font-size: 24px;
+            animation: swim 5s linear infinite;
+        }
+
+        .fish-one {
+            top: 35%;
+            left: -40px;
+        }
+
+        .fish-two {
+            bottom: 20%;
+            right: -40px;
+            animation-delay: 2s;
+            animation-direction: reverse;
+        }
+
+        @keyframes swim {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(340px);
+            }
+        }
+
+        .submarine {
+            width: 130px;
+            height: 55px;
+            border: 4px solid #174c6b;
+            border-radius: 50%;
+            background: #f5a68b;
+            position: relative;
+            z-index: 1;
+        }
+
+        .submarine::before {
+            content: "";
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            top: -25px;
+            left: 43px;
+            background: #d7f6fb;
+            border: 4px solid #174c6b;
+            border-radius: 50%;
+        }
+
+        .submarine::after {
+            content: "...";
+            position: absolute;
+            top: 10px;
+            left: 25px;
+            letter-spacing: 8px;
+            color: #174c6b;
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: 12px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .story-card {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #c4e2e9;
+            margin-top: 20px;
+        }
+
+        .challenge {
+            padding: 20px;
+            margin-top: 20px;
+            background: #fff1cf;
+            border-left: 4px solid #ed8269;
+            border-radius: 5px;
+        }
+
+        .challenge h3 {
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .choices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .choice {
+            background: white;
+            color: #175b79;
+            border: 1px solid #a8d1dd;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .choice:hover {
+            background: #d5f1f7;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 12px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Computer illustration */
+
+        .computer-art {
+            width: 180px;
+            height: 125px;
+            border: 8px solid #175b79;
+            border-radius: 8px;
+            background: white;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ed8269;
+            font-weight: bold;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .computer-art::after {
+            content: "";
+            position: absolute;
+            height: 12px;
+            width: 75px;
+            background: #175b79;
+            bottom: -20px;
+        }
+
+        /* Space elevator */
+
+        .space {
+            background: #173d58;
+        }
+
+        .stars {
+            position: absolute;
+            inset: 0;
+            color: white;
+            font-size: 20px;
+        }
+
+        .stars span {
+            position: absolute;
+        }
+
+        .stars span:nth-child(1) {
+            top: 15%;
+            left: 15%;
+        }
+
+        .stars span:nth-child(2) {
+            top: 30%;
+            right: 18%;
+        }
+
+        .stars span:nth-child(3) {
+            bottom: 18%;
+            left: 25%;
+        }
+
+        .planet {
+            position: absolute;
+            width: 65px;
+            height: 65px;
+            background: #f5a68b;
+            border: 3px solid #fff1bd;
+            border-radius: 50%;
+            top: 20px;
+            right: 22px;
+        }
+
+        .elevator {
+            width: 70px;
+            height: 215px;
+            border-left: 5px solid #fff1bd;
+            border-right: 5px solid #fff1bd;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 27px,
+                #fff1bd 28px,
+                #fff1bd 32px
+            );
+            position: relative;
+            z-index: 1;
+        }
+
+        .lift {
+            position: absolute;
+            bottom: 0;
+            left: 8px;
+            width: 42px;
+            height: 35px;
+            background: #ed8269;
+            border: 3px solid white;
+            border-radius: 4px;
+            transition: bottom 2.5s ease-in-out;
+        }
+
+        .elevator.launched .lift {
+            bottom: 170px;
+        }
+
+        /* Interactive final ending */
+
+        .event-ending {
+            text-align: center;
+            padding: 85px 7%;
+            background: #fff1cf;
+            scroll-margin-top: 90px;
+        }
+
+        .ending-story {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .ending-intro {
+            max-width: 600px;
+            margin: 15px auto 30px;
+        }
+
+        .final-screen {
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #173d58;
+            color: white;
+            border: 5px solid #b4dce6;
+            border-radius: 12px;
+            box-shadow: 7px 7px 0 #d8c89f;
+        }
+
+        .screen-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #52768a;
+        }
+
+        .live-dot {
+            color: #91e2b4;
+        }
+
+        .screen-content {
+            padding: 25px 10px;
+        }
+
+        .signal-symbol {
+            color: #ed8269;
+            font-size: 45px;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .screen-content h3 {
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .screen-content p {
+            margin: 12px auto 20px;
+        }
+
+        .story-fragments {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 35px 0;
+            text-align: left;
+        }
+
+        .fragment-card {
+            background: white;
+            border: 1px solid #e0d2ad;
+            border-radius: 8px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        .fragment-card span {
+            color: #347c94;
+            font-size: 11px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .fragment-card h3 {
+            margin: 12px 0;
+            color: #175b79;
+            font-size: 19px;
+        }
+
+        .fragment-card p {
+            font-size: 14px;
+        }
+
+        .fragment-card.locked {
+            opacity: 0.35;
+            transform: scale(0.97);
+        }
+
+        .fragment-card.unlocked {
+            opacity: 1;
+            transform: scale(1);
+            border-color: #ed8269;
+            box-shadow: 0 5px 15px #173d5812;
+        }
+
+        .final-choice {
+            max-width: 650px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+        .final-reveal {
+            padding: 30px 15px;
+            margin-top: 30px;
+            border-top: 1px solid #e0d2ad;
+        }
+
+        .final-reveal h2 {
+            margin-top: 10px;
+        }
+
+        .last-line {
+            font-style: italic;
+            margin: 25px 0 !important;
+            color: #347c94;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .collection {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            z-index: 20;
+            padding: 12px 15px;
+            background: #175b79;
+            color: white;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px #0002;
+            font-size: 13px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #173d58;
+            color: white;
+            font-size: 13px;
+        }
+
+        /* Reveal chapters on scroll */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: 0.8s;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile layout */
+
+        @media (max-width: 750px) {
+            header {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .progress-box {
+                top: 85px;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 55px 7%;
+            }
+
+            .art {
+                width: 220px;
+                height: 220px;
+            }
+
+            .chapter-inner {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .drawing {
+                min-height: 230px;
+            }
+
+            .story-fragments {
+                grid-template-columns: 1fr;
+            }
+
+            .fragment-card {
+                padding: 18px;
+            }
+
+            .final-screen {
+                padding: 12px;
+            }
+
+            .collection {
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+
+    <header>
+        <div class="logo">BOBA<span>BASH.</span></div>
+
+        <nav>
+            <a href="#signal">The Signal</a>
+            <a href="#station">The Station</a>
+            <a href="#elevator">Space Elevator</a>
+            <a href="#ending">The Ending</a>
+        </nav>
+    </header>
+
+    <div class="progress-box">
+        <div id="progress"></div>
+    </div>
+
+    <div class="collection">
+        Signal fragments: <span id="score">0</span>/3
+    </div>
+
+    <!-- HERO SECTION -->
+
+    <section class="hero" id="top">
+        <div class="hero-text">
+            <div class="small-title">
+                An interactive story · Boba Bash 2026
+            </div>
+
+            <h1>THE LAST<br><span>SIGNAL</span></h1>
+
+            <p>
+                At 2:17 AM, a mysterious signal arrives from the
+                bottom of the ocean. Nobody knows who sent it.
+                Nobody knows what it means.
+
+                You are about to find out.
+            </p>
+
+            <a href="#signal" class="button">
+                Start your adventure ↓
+            </a>
+        </div>
+
+        <div class="art">
+            <div class="core"></div>
+        </div>
+    </section>
+
+    <!-- CHAPTER 1: THE SIGNAL -->
+
+    <section class="chapter" id="signal">
+        <div class="chapter-inner reveal">
+
+            <div class="drawing ocean" id="ocean">
+                <div class="moon"></div>
+                <div class="fish fish-one">🐟</div>
+                <div class="fish fish-two">🐠</div>
+                <div class="submarine"></div>
+
+                <div class="click-hint">
+                    Click the ocean to search
+                </div>
+            </div>
+
+            <div>
+                <div class="small-title">
+                    Chapter 01 · The discovery
+                </div>
+
+                <h2>A Voice Beneath the Waves</h2>
+
+                <p>
+                    Nova was exploring the deep sea when the radio
+                    suddenly came alive. Three strange pulses appeared
+                    on the screen.
+                </p>
+
+                <p>
+                    There was a signal coming from somewhere below.
+                    Nova moved the submarine closer, but the message
+                    was scrambled.
+                </p>
+
+                <div class="story-card hidden" id="signalMessage">
+                    <strong>Signal detected!</strong>
+
+                    <p>
+                        "THE ELEVATOR IS FAILING. FIND THE STATION.
+                        THE FUTURE DEPENDS ON YOU."
+                    </p>
+
+                    <p>
+                        Three fragments are hidden along your journey.
+                    </p>
+                </div>
+
+                <div class="challenge">
+                    <h3>Mission 1: Decode the signal</h3>
+
+                    <p>
+                        The computer shows a simple code:
+                        3 - 1 - 20. A = 1, B = 2, C = 3...
+                        What word does it spell?
+                    </p>
+
+                    <div class="choices">
+                        <button class="choice"
+                            onclick="checkSignal('CAT')">CAT</button>
+
+                        <button class="choice"
+                            onclick="checkSignal('BAT')">BAT</button>
+
+                        <button class="choice"
+                            onclick="checkSignal('CAR')">CAR</button>
+                    </div>
+
+                    <div class="feedback" id="signalFeedback"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CHAPTER 2: THE STATION -->
+
+    <section class="chapter" id="station">
+        <div class="chapter-inner reveal">
+
+            <div class="drawing">
+                <div class="computer-art" id="computerScreen">
+                    SYSTEM<br>OFFLINE
+                </div>
+            </div>
+
+            <div>
+                <div class="small-title">
+                    Chapter 02 · The old station
+                </div>
+
+                <h2>A Computer That Forgot Everything</h2>
+
+                <p>
+                    Nova reached an abandoned research station.
+                    Dust covered the equipment, and the main computer
+                    was barely running.
+                </p>
+
+                <p>
+                    The computer needed a power source before it
+                    could reveal the elevator's location.
+                </p>
+
+                <div class="challenge">
+                    <h3>Mission 2: Repair the computer</h3>
+
+                    <p>
+                        The power is off. Which component should
+                        Nova check first?
+                    </p>
+
+                    <div class="choices">
+                        <button class="choice"
+                            onclick="checkRepair('keyboard')">
+                            Keyboard
+                        </button>
+
+                        <button class="choice"
+                            onclick="checkRepair('power')">
+                            Power supply
+                        </button>
+
+                        <button class="choice"
+                            onclick="checkRepair('wallpaper')">
+                            Wallpaper
+                        </button>
+                    </div>
+
+                    <div class="feedback" id="repairFeedback"></div>
+                </div>
+
+                <div class="story-card hidden" id="stationMessage">
+                    <strong>Computer restored!</strong>
+
+                    <p>
+                        "The space elevator is located at the
+                        northern launch station. Its systems are
+                        waiting for a restart."
+                    </p>
+
+                    <p>Fragment 2 acquired.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CHAPTER 3: SPACE ELEVATOR -->
+
+    <section class="chapter" id="elevator">
+        <div class="chapter-inner reveal">
+
+            <div class="drawing space" id="spaceDrawing">
+                <div class="stars">
+                    <span>✦</span>
+                    <span>✧</span>
+                    <span>✦</span>
+                </div>
+
+                <div class="planet"></div>
+
+                <div class="elevator" id="elevatorArt">
+                    <div class="lift"></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="small-title">
+                    Chapter 03 · The final mission
+                </div>
+
+                <h2>A Road to the Stars</h2>
+
+                <p>
+                    Nova finally reached the elevator. It stretched
+                    high above the clouds, connecting Earth to a
+                    station far out in space.
+                </p>
+
+                <p>
+                    The system was damaged. Without a restart,
+                    the last route to the upper station would remain
+                    closed.
+                </p>
+
+                <div class="challenge">
+                    <h3>Mission 3: Start the elevator</h3>
+
+                    <p>
+                        You have found the controls. Are you ready
+                        to send Nova into space?
+                    </p>
+
+                    <button class="button" id="launchButton"
+                        onclick="launchElevator()">
+                        Launch the elevator 🚀
+                    </button>
+
+                    <div class="feedback" id="launchFeedback"></div>
+                </div>
+
+                <div class="story-card hidden" id="spaceMessage">
+                    <strong>Launch successful!</strong>
+
+                    <p>
+                        The elevator is moving. The stars are getting
+                        closer, and the final message is almost here.
+                    </p>
+
+                    <p>Fragment 3 acquired.</p>
+
+                    <a href="#ending" class="button">
+                        Discover the truth ↓
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FINAL INTERACTIVE ENDING -->
+
+    <section class="event-ending" id="ending">
+        <div class="ending-story">
+
+            <div class="small-title">
+                Final chapter · The last transmission
+            </div>
+
+            <h2>The Message Beyond the Stars</h2>
+
+            <p class="ending-intro">
+                The elevator stops. The stars fall silent.
+                Then Nova's screen lights up one last time.
+            </p>
+
+            <div class="final-screen">
+
+                <div class="screen-top">
+                    <span>UNKNOWN TRANSMISSION</span>
+                    <span class="live-dot">● LIVE</span>
+                </div>
+
+                <div class="screen-content" id="finalMessage">
+                    <div class="signal-symbol">✦</div>
+
+                    <h3>Something is waiting...</h3>
+
+                    <p>
+                        Three fragments were left behind.
+                        Each one holds a piece of the truth.
+                    </p>
+
+                    <button class="button"
+                        onclick="revealFragment(1)">
+                        Open the first message
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="story-fragments">
+
+                <div class="fragment-card locked" id="fragment1">
+                    <span>FRAGMENT 01</span>
+
+                    <h3>The Forgotten Voice</h3>
+
+                    <p>
+                        "We knew our journey would end someday.
+                        But knowledge should never end with us."
+                    </p>
+                </div>
+
+                <div class="fragment-card locked" id="fragment2">
+                    <span>FRAGMENT 02</span>
+
+                    <h3>The Secret of the Station</h3>
+
+                    <p>
+                        The explorers had left their discoveries behind
+                        so that someone else could continue their work.
+                        Nova was never meant to find the answers alone.
+                    </p>
+                </div>
+
+                <div class="fragment-card locked" id="fragment3">
+                    <span>FRAGMENT 03</span>
+
+                    <h3>The Last Question</h3>
+
+                    <p>
+                        A final message appeared:
+                        "You have found what we left behind.
+                        What will you do with it?"
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Audience chooses the ending -->
+
+            <div class="challenge final-choice hidden" id="finalChoice">
+                <h3>Nova has one final decision to make.</h3>
+
+                <p>
+                    What should happen to the discovery?
+                </p>
+
+                <div class="choices">
+                    <button class="choice"
+                        onclick="chooseEnding('secret')">
+                        Keep it a secret
+                    </button>
+
+                    <button class="choice"
+                        onclick="chooseEnding('share')">
+                        Share it with the world
+                    </button>
+                </div>
+
+                <div id="choiceFeedback" class="feedback"></div>
+            </div>
+
+            <!-- The selected ending appears here -->
+
+            <div class="final-reveal hidden" id="finalReveal">
+                <div class="signal-symbol">✧</div>
+
+                <div class="small-title">
+                    Transmission complete
+                </div>
+
+                <h2 id="endingTitle">The story continues...</h2>
+
+                <p id="endingDescription"></p>
+
+                <p class="last-line">
+                    "Every ending leaves a signal for someone new."
+                </p>
+
+                <button class="button" onclick="restartStory()">
+                    Begin the adventure again ↻
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>Boba Bash Lucknow 2026</p>
+        <p>Keep exploring. Keep learning. Build together.</p>
+    </footer>
+
+    <script>
+        // Store the number of fragments collected.
+        let fragments = 0;
+        let currentFragment = 0;
+
+        // Update the fragment counter.
+        function collectFragment() {
+            fragments = Math.min(fragments + 1, 3);
+
+            document.getElementById("score").textContent = fragments;
+        }
+
+        // Mission 1: Decode the signal.
+        function checkSignal(answer) {
+            let feedback = document.getElementById("signalFeedback");
+
+            if (answer === "CAT") {
+                feedback.textContent =
+                    "Correct! 3 = C, 1 = A, 20 = T. Signal unlocked!";
+
+                document.getElementById("signalMessage")
+                    .classList.remove("hidden");
+
+                if (!document.getElementById("signal").dataset.done) {
+                    collectFragment();
+
+                    document.getElementById("signal").dataset.done = "yes";
+                }
+            } else {
+                feedback.textContent =
+                    "Not quite! Try converting each number into a letter.";
+            }
+        }
+
+        // Clicking the ocean also reveals the signal.
+        document.getElementById("ocean").addEventListener("click", function() {
+            document.getElementById("signalMessage")
+                .classList.remove("hidden");
+        });
+
+        // Mission 2: Repair the computer.
+        function checkRepair(answer) {
+            let feedback = document.getElementById("repairFeedback");
+
+            if (answer === "power") {
+                feedback.textContent =
+                    "Correct! The computer needs power first.";
+
+                document.getElementById("computerScreen").innerHTML =
+                    "SYSTEM<br>ONLINE";
+
+                document.getElementById("stationMessage")
+                    .classList.remove("hidden");
+
+                if (!document.getElementById("station").dataset.done) {
+                    collectFragment();
+
+                    document.getElementById("station").dataset.done = "yes";
+                }
+            } else {
+                feedback.textContent =
+                    "Try again! Think about what makes a computer turn on.";
+            }
+        }
+
+        // Mission 3: Launch the space elevator.
+        function launchElevator() {
+            let elevator = document.getElementById("elevatorArt");
+            let feedback = document.getElementById("launchFeedback");
+
+            if (elevator.classList.contains("launched")) {
+                feedback.textContent = "The elevator is already in motion!";
+                return;
+            }
+
+            elevator.classList.add("launched");
+
+            feedback.textContent =
+                "Power restored! The elevator is moving into space...";
+
+            document.getElementById("launchButton").disabled = true;
+
+            document.getElementById("launchButton").textContent =
+                "Elevator launched ✓";
+
+            document.getElementById("spaceMessage")
+                .classList.remove("hidden");
+
+            if (!document.getElementById("elevator").dataset.done) {
+                collectFragment();
+
+                document.getElementById("elevator").dataset.done = "yes";
+            }
+        }
+
+        // Reveal the final story fragments one at a time.
+        function revealFragment(number) {
+            const messages = {
+                1: {
+                    title: "A voice from the past",
+                    text: "The first message belongs to explorers who disappeared long ago."
+                },
+
+                2: {
+                    title: "They left a path behind",
+                    text: "Their station contains everything needed to continue their discoveries."
+                },
+
+                3: {
+                    title: "The future is yours",
+                    text: "Nova now has to decide whether this discovery belongs to one person or everyone."
+                }
+            };
+
+            // Unlock the selected fragment.
+            document.getElementById("fragment" + number)
+                .classList.remove("locked");
+
+            document.getElementById("fragment" + number)
+                .classList.add("unlocked");
+
+            currentFragment = number;
+
+            const message = messages[number];
+
+            // Change the message and show the next button.
+            document.getElementById("finalMessage").innerHTML = `
+                <div class="signal-symbol">✦</div>
+
+                <h3>${message.title}</h3>
+
+                <p>${message.text}</p>
+
+                ${
+                    number < 3
+                    ? `<button class="button"
+                        onclick="revealFragment(${number + 1})">
+                        Reveal the next fragment →
+                       </button>`
+                    : `<button class="button"
+                        onclick="showFinalChoice()">
+                        Make the final decision →
+                       </button>`
+                }
+            `;
+        }
+
+        // Show the final choice.
+        function showFinalChoice() {
+            document.getElementById("finalChoice")
+                .classList.remove("hidden");
+
+            document.getElementById("finalChoice")
+                .scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+        }
+
+        // Show a different ending based on the audience's choice.
+        function chooseEnding(choice) {
+            const title = document.getElementById("endingTitle");
+            const description = document.getElementById("endingDescription");
+
+            if (choice === "secret") {
+                title.textContent = "A Light in the Darkness";
+
+                description.textContent =
+                    "Nova keeps the discovery hidden. The station remains " +
+                    "quiet, and the world never learns what was found. " +
+                    "But somewhere in the darkness, another signal begins. " +
+                    "Perhaps someone else will discover the truth someday.";
+            } else {
+                title.textContent = "A New Beginning";
+
+                description.textContent =
+                    "Nova shares the discovery with the world. Researchers " +
+                    "work together, new explorers arrive, and the abandoned " +
+                    "station becomes a place of learning again. The knowledge " +
+                    "that once belonged to a few becomes a possibility for everyone.";
+            }
+
+            document.getElementById("finalReveal")
+                .classList.remove("hidden");
+
+            document.getElementById("finalReveal")
+                .scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+        }
+
+        // Update the page progress bar while scrolling.
+        window.addEventListener("scroll", function() {
+            let scrollTop = window.scrollY;
+
+            let pageHeight =
+                document.documentElement.scrollHeight - window.innerHeight;
+
+            let progress = pageHeight > 0
+                ? (scrollTop / pageHeight) * 100
+                : 0;
+
+            document.getElementById("progress").style.width =
+                progress + "%";
+        });
+
+        // Reveal chapters when they enter the screen.
+        let observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.12
+        });
+
+        document.querySelectorAll(".reveal").forEach(function(section) {
+            observer.observe(section);
+        });
+
+        // Restart the whole story.
+        function restartStory() {
+            fragments = 0;
+            currentFragment = 0;
+
+            document.getElementById("score").textContent = "0";
+
+            document.getElementById("signalMessage")
+                .classList.add("hidden");
+
+            document.getElementById("stationMessage")
+                .classList.add("hidden");
+
+            document.getElementById("spaceMessage")
+                .classList.add("hidden");
+
+            document.getElementById("signalFeedback").textContent = "";
+            document.getElementById("repairFeedback").textContent = "";
+            document.getElementById("launchFeedback").textContent = "";
+
+            document.getElementById("computerScreen").innerHTML =
+                "SYSTEM<br>OFFLINE";
+
+            document.getElementById("elevatorArt")
+                .classList.remove("launched");
+
+            document.getElementById("launchButton").disabled = false;
+
+            document.getElementById("launchButton").textContent =
+                "Launch the elevator 🚀";
+
+            delete document.getElementById("signal").dataset.done;
+            delete document.getElementById("station").dataset.done;
+            delete document.getElementById("elevator").dataset.done;
+
+            document.getElementById("finalChoice")
+                .classList.add("hidden");
+
+            document.getElementById("finalReveal")
+                .classList.add("hidden");
+
+            // Lock all fragments again.
+            document.querySelectorAll(".fragment-card").forEach(function(card) {
+                card.classList.remove("unlocked");
+                card.classList.add("locked");
+            });
+
+            // Restore the first message.
+            document.getElementById("finalMessage").innerHTML = `
+                <div class="signal-symbol">✦</div>
+
+                <h3>Something is waiting...</h3>
+
+                <p>
+                    Three fragments were left behind.
+                    Each one holds a piece of the truth.
+                </p>
+
+                <button class="button" onclick="revealFragment(1)">
+                    Open the first message
+                </button>
+            `;
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    </script>
+
+</body>
+</html>
